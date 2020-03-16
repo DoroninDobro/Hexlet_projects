@@ -1,0 +1,26 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=c6412f710ad78e4a80e200dcddd055f54bb50e21a9c35d469a95968a4b86f0ca
+
+language: python
+python: 3.6
+
+install: make
+
+before_install:
+  - pip install poetry
+  - pip install flake8
+  - pip install PyYAML
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - make lint
+  - make run_test
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  
